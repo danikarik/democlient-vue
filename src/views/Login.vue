@@ -64,7 +64,7 @@ export default {
   methods: {
     handleLogin: function() {
       this.loading = true
-      const url = 'http://localhost:5000/login'
+      const url = 'https://api-dev.okpock.com/login'
       this.$axios.post(url, {
         username: this.username,
         password: this.password
@@ -78,7 +78,7 @@ export default {
     },
     loadAccount: function() {
       this.loading = true
-      const url = 'http://localhost:5000/account'
+      const url = 'https://api-dev.okpock.com/account'
       this.$axios.get(url, {
         withCredentials: true
       }).then(response => {
@@ -91,7 +91,7 @@ export default {
     },
     handleUsernameChange: function() {
       this.loading = true
-      const url = 'http://localhost:5000/account/username'
+      const url = 'https://api-dev.okpock.com/account/username'
       this.$axios.put(url, {
         username: this.newusername
       }, {
