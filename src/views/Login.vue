@@ -24,6 +24,8 @@
               <input type="text" name="newusername" id="newusername" v-model="newusername">
               <button type="submit">Change</button>
             </form>
+
+            <button v-on:click="handleLogout">Logout</button>
           </div>
         </div>
         <div v-else>
@@ -49,6 +51,7 @@ export default {
   name: 'login',
   data: function() {
     return {
+      url: 'https://api-dev.okpock.com',
       username: '',
       newusername: '',
       password: '',
@@ -62,10 +65,12 @@ export default {
     user: 'user'
   }),
   methods: {
+    getUrl(path) {
+      return this.url + path
+    },
     handleLogin: function() {
       this.loading = true
-      const url = 'https://api-dev.okpock.com/login'
-      this.$axios.post(url, {
+      this.$axios.post(this.getUrl('/login'), {
         username: this.username,
         password: this.password
       }).then(response => {
@@ -76,10 +81,19 @@ export default {
       })
       .finally(() => this.loading = false)
     },
+    handleLogout: function() {
+      this.loading = true
+      this.$axios.delete(this.getUrl('/logout')).then(response => {
+        this.$store.commit('logoutUser')
+      }).catch(error => {
+        console.log(error)
+        this.errored = true
+      })
+      .finally(() => this.loading = false)
+    },
     loadAccount: function() {
       this.loading = true
-      const url = 'https://api-dev.okpock.com/account'
-      this.$axios.get(url, {
+      this.$axios.get(this.getUrl('/account'), {
         withCredentials: true
       }).then(response => {
         this.$store.commit('saveUser', response.data)
@@ -91,8 +105,7 @@ export default {
     },
     handleUsernameChange: function() {
       this.loading = true
-      const url = 'https://api-dev.okpock.com/account/username'
-      this.$axios.put(url, {
+      this.$axios.put(this.getUrl('/account/username'), {
         username: this.newusername
       }, {
         withCredentials: true

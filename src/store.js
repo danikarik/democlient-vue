@@ -7,8 +7,8 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   plugins: [createPersistedState()],
   state: {
-    isLoggedIn: null,
-    lastSignInAt: null,
+    isLoggedIn: false,
+    lastSignInAt: '',
     user: null
   },
   mutations: {
@@ -21,6 +21,11 @@ const store = new Vuex.Store({
     },
     changeUsername(state, payload) {
       state.user.username = payload
+    },
+    logoutUser(state) {
+      state.isLoggedIn = false
+      state.lastSignInAt = ''
+      state.user = null
     }
   },
   actions: {
